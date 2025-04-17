@@ -209,6 +209,10 @@ export class Playwright extends BrowserInterface {
       cpuThrottleRate: number
       pushErrorAsConsoleLog?: boolean
       beforePageLoad?: (...args: any[]) => void
+      /**
+       * @default "load"
+       */
+      waitUntil?: 'domcontentloaded' | 'load' | 'networkidle' | 'commit'
     }
   ) {
     await this.close()
@@ -292,7 +296,7 @@ export class Playwright extends BrowserInterface {
 
     opts?.beforePageLoad?.(page)
 
-    await page.goto(url, { waitUntil: 'load' })
+    await page.goto(url, { waitUntil: opts?.waitUntil ?? 'load' })
   }
 
   back(options) {
@@ -305,9 +309,13 @@ export class Playwright extends BrowserInterface {
       await page.goForward(options)
     })
   }
-  refresh() {
+  refresh({
+    waitUntil,
+  }: {
+    waitUntil?: 'domcontentloaded' | 'load' | 'networkidle' | 'commit'
+  } = {}) {
     return this.chain(async () => {
-      await page.reload()
+      await page.reload({ waitUntil })
     })
   }
   setDimensions({ width, height }: { height: number; width: number }) {
