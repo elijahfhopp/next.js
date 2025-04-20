@@ -43,7 +43,7 @@ export type NextDevOptions = {
   disableSourceMaps: boolean
   turbo?: boolean
   turbopack?: boolean
-  port: number
+  port: number | 'lodash'
   hostname?: string
   experimentalHttps?: boolean
   experimentalHttpsKey?: string
